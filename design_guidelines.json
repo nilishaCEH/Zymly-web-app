@@ -1,0 +1,117 @@
+{
+  "project_name": "Zymly Portfolio Web App",
+  "theme_strategy": {
+    "theme": "LIGHT",
+    "archetype": "1 (Organic & Earthy) mixed with GenZ Neo-Brutalist Layouts",
+    "vibe": "GenZ, energetic, enthusiastic, health freak",
+    "rationale": "Patients and wellness users need warmth and trust (Cream/Gold), but GenZ demands high-energy, high-contrast layouts (Charcoal accents, huge typography, motion)."
+  },
+  "colors": {
+    "background": "#E0D8C8",
+    "foreground": "#2B3033",
+    "primary": "#C8A25F",
+    "primary_foreground": "#FFFFFF",
+    "card": "#F2EFE8",
+    "card_foreground": "#2B3033",
+    "accent": "#2B3033",
+    "accent_foreground": "#E0D8C8",
+    "border": "rgba(43, 48, 51, 0.15)",
+    "ring": "#C8A25F",
+    "flavors": {
+      "simply_lemon": "#F4D03F",
+      "ginger_lemon": "#E67E22",
+      "cinne_pineapple": "#F1C40F",
+      "tangy_orange": "#E67E22",
+      "berry_bliss": "#E74C3C"
+    }
+  },
+  "typography": {
+    "google_fonts_url": "https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700;900&family=Manrope:wght@400;500;600;700&display=swap",
+    "headings": {
+      "fontFamily": "'Outfit', sans-serif",
+      "style": "Radical weight contrast (font-black for impact, tracking-tighter)"
+    },
+    "body": {
+      "fontFamily": "'Manrope', sans-serif",
+      "style": "Clean geometric legibility (leading-relaxed)"
+    },
+    "hierarchy": {
+      "h1": "text-4xl sm:text-5xl lg:text-6xl tracking-tighter font-black text-[#2B3033]",
+      "h2": "text-2xl sm:text-3xl lg:text-4xl tracking-tight font-bold text-[#2B3033]",
+      "h3": "text-xl sm:text-2xl font-bold text-[#2B3033]",
+      "body_text": "text-base lg:text-lg text-[#2B3033]/80"
+    }
+  },
+  "spacing_and_layout": {
+    "marketing": {
+      "grid": "Tetris Grid (cols-1 md:grid-cols-8 lg:grid-cols-12), gap-8",
+      "padding": "Generous (p-12 to p-32)",
+      "alignment": "Optical alignment, heavily asymmetric. Avoid centering blocks of text. Use left alignment for body copy.",
+      "hero_overlay": "Max bg-black/30 or gradient overlay. Let the image breathe."
+    },
+    "dashboard_cms": {
+      "grid": "Control Room Grid (cols-1 md:grid-cols-3 lg:grid-cols-4), gap-4",
+      "padding": "Dense (p-4 to p-6)",
+      "card_style": "Cardless or flat cards with 1px border (#2B3033/15), NO drop-shadow, subtle rounded-md."
+    }
+  },
+  "components_strategy": {
+    "buttons": "High contrast. Default: bg-[#2B3033] text-[#E0D8C8] hover:bg-[#1A1D1F]. Primary CTA: bg-[#C8A25F] text-white hover:bg-[#B38D4A]. Ensure explicit text color on hover.",
+    "navigation": "Sticky Header with Crystal Glassmorphism: bg-[#E0D8C8]/70 backdrop-blur-xl border-b border-[#2B3033]/10. Must have logo, 4 links, 1 primary CTA.",
+    "marquee": "Use react-fast-marquee. 'Editorial Ribbon' style: Serif/Mono uppercase, pale background, dark text, massive gaps between items, extremely slow movement.",
+    "forms": "Use Shadcn customized inputs. Border #2B3033/30, focus:ring-2 focus:ring-[#C8A25F] bg-transparent.",
+    "accessibility": "ALL interactive elements must have 'data-testid' (e.g., 'submit-contact-button'). Minimal 4.5:1 contrast."
+  },
+  "media": {
+    "logo": {
+      "url": "https://customer-assets.emergentagent.com/job_zymly-mission/artifacts/retece6k_1180243_fotor-2026012315320_1769161062478.png",
+      "description": "Zymly official brand logo"
+    },
+    "hero_image": {
+      "url": "https://images.unsplash.com/photo-1496568934502-9e86936646be?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1OTV8MHwxfHNlYXJjaHwyfHxkcmlua2luZyUyMGp1aWNlJTIwc3Vubnl8ZW58MHx8fHwxNzc1NzYxODQ5fDA&ixlib=rb-4.1.0&q=85",
+      "description": "Energetic GenZ youth drinking juice in the sun. Place in hero section."
+    },
+    "product_bottles": {
+      "url": "https://images.pexels.com/photos/8475719/pexels-photo-8475719.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+      "description": "Natural kombucha/health drink bottles. Use in Natural Flavors gallery."
+    },
+    "about_team": {
+      "url": "https://images.unsplash.com/photo-1683912568493-9a6a94aacfe3?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxODF8MHwxfHNlYXJjaHwxfHxncm91cCUyMG9mJTIwZnJpZW5kcyUyMGxhdWdoaW5nJTIwc3Vubnl8ZW58MHx8fHwxNzc1NzYxNzkxfDA&ixlib=rb-4.1.0&q=85",
+      "description": "Group of GenZ friends laughing in the sun. Use in About Us section."
+    },
+    "ingredients": [
+      {
+        "name": "Lemon",
+        "url": "https://images.pexels.com/photos/12739023/pexels-photo-12739023.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+      },
+      {
+        "name": "Ginger",
+        "url": "https://images.pexels.com/photos/10112136/pexels-photo-10112136.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+      }
+    ]
+  },
+  "content_data": {
+    "brand_name": "Zymly",
+    "contact_email": "contactus@zymly.in",
+    "flavors_list": [
+      "Simply Lemon",
+      "Ginger Lemon",
+      "Cinne Pineapple",
+      "Tangy Orange",
+      "Berry Bliss"
+    ],
+    "social_links": {
+      "instagram": "https://instagram.com/zymly"
+    }
+  },
+  "instructions_to_main_agent": [
+    "READ THIS CRITICAL RULE: Implement a fully responsive, pixel-perfect UI using Tailwind CSS based on the parameters above.",
+    "Add 'Outfit' and 'Manrope' via Google Fonts in public/index.html.",
+    "Configure tailwind.config.js with the custom colors provided: background, foreground, primary, border.",
+    "Create the Marketing pages (Home, Natural Flavors, Our Mission, About Us, Contact Us) using raw HTML/Tailwind for expressive layouts. AVOID Shadcn Card/Section for public pages to maintain asymmetry.",
+    "Create the Admin CMS Dashboard using Shadcn components (heavily customized with flat, 1px border style).",
+    "Integrate Framer Motion for scroll reveal animations and entrance staggers. Use 'lenis' for smooth scrolling on public pages.",
+    "Include 'data-testid' attributes on ALL interactive buttons, links, form inputs, and key UI markers for automated testing.",
+    "State management: Ensure that CMS updates (even if mocked via context/state) reflect on the public pages for 'fully Customizable from the backend' requirement."
+  ]
+}
