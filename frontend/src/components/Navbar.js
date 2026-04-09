@@ -1,0 +1,131 @@
+import React, { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { Menu, X, Instagram } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+
+const Navbar = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const location = useLocation();
+
+  const navLinks = [
+    { path: '/', label: 'Home' },
+    { path: '/flavors', label: 'Natural Flavors' },
+    { path: '/mission', label: 'Our Mission' },
+    { path: '/about', label: 'About Us' },
+    { path: '/contact', label: 'Contact' },
+  ];
+
+  const isActive = (path) => location.pathname === path;
+
+  return (
+    <nav className="fixed top-0 left-0 right-0 z-50 glass border-b border-[#2B3033]/10" data-testid="navbar">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-20">
+          {/* Logo */}
+          <Link to="/" className="flex items-center gap-3" data-testid="nav-logo">
+            <img 
+              src="https://customer-assets.emergentagent.com/job_zymly-mission/artifacts/retece6k_1180243_fotor-2026012315320_1769161062478.png" 
+              alt="Zymly" 
+              className="h-12 w-auto"
+            />
+          </Link>
+
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center gap-8">
+            {navLinks.map((link) => (
+              <Link
+                key={link.path}
+                to={link.path}
+                data-testid={`nav-link-${link.label.toLowerCase().replace(/\s+/g, '-')}`}
+                className={`font-medium transition-colors duration-300 ${
+                  isActive(link.path)
+                    ? 'text-[#C8A25F]'
+                    : 'text-[#2B3033] hover:text-[#C8A25F]'
+                }`}
+              >
+                {link.label}
+              </Link>
+            ))}
+          </div>
+
+          {/* Social & CTA */}
+          <div className="hidden md:flex items-center gap-4">
+            <a
+              href="https://instagram.com/zymly"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[#2B3033] hover:text-[#C8A25F] transition-colors"
+              data-testid="nav-instagram"
+            >
+              <Instagram size={22} />
+            </a>
+            <Link
+              to="/contact"
+              className="btn-primary text-sm"
+              data-testid="nav-cta"
+            >
+              Get in Touch
+            </Link>
+          </div>
+
+          {/* Mobile Menu Button */}
+          <button
+            className="md:hidden text-[#2B3033] p-2"
+            onClick={() => setIsOpen(!isOpen)}
+            data-testid="mobile-menu-toggle"
+          >
+            {isOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="md:hidden bg-[#E0D8C8] border-t border-[#2B3033]/10"
+            data-testid="mobile-menu"
+          >
+            <div className="px-4 py-6 space-y-4">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.path}
+                  to={link.path}
+                  onClick={() => setIsOpen(false)}
+                  data-testid={`mobile-nav-link-${link.label.toLowerCase().replace(/\s+/g, '-')}`}
+                  className={`block py-2 font-medium ${
+                    isActive(link.path) ? 'text-[#C8A25F]' : 'text-[#2B3033]'
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              ))}
+              <div className="pt-4 border-t border-[#2B3033]/10 flex items-center gap-4">
+                <a
+                  href="https://instagram.com/zymly"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[#2B3033] hover:text-[#C8A25F] transition-colors"
+                >
+                  <Instagram size={22} />
+                </a>
+                <Link
+                  to="/contact"
+                  onClick={() => setIsOpen(false)}
+                  className="btn-primary text-sm"
+                >
+                  Get in Touch
+                </Link>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </nav>
+  );
+};
+
+export default Navbar;

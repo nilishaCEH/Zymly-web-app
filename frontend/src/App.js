@@ -1,53 +1,64 @@
-import { useEffect } from "react";
-import "@/App.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import axios from "axios";
+import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import ProtectedRoute from './components/ProtectedRoute';
+import Navbar from './components/Navbar';
+import Footer from './components/Footer';
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-const API = `${BACKEND_URL}/api`;
+// Public Pages
+import Home from './pages/Home';
+import NaturalFlavors from './pages/NaturalFlavors';
+import OurMission from './pages/OurMission';
+import AboutUs from './pages/AboutUs';
+import ContactUs from './pages/ContactUs';
 
-const Home = () => {
-  const helloWorldApi = async () => {
-    try {
-      const response = await axios.get(`${API}/`);
-      console.log(response.data.message);
-    } catch (e) {
-      console.error(e, `errored out requesting / api`);
-    }
-  };
+// Admin Pages
+import AdminLogin from './pages/admin/AdminLogin';
+import AdminDashboard from './pages/admin/AdminDashboard';
+import ContentManager from './pages/admin/ContentManager';
+import FlavorsManager from './pages/admin/FlavorsManager';
+import SubmissionsManager from './pages/admin/SubmissionsManager';
 
-  useEffect(() => {
-    helloWorldApi();
-  }, []);
+import './App.css';
 
-  return (
-    <div>
-      <header className="App-header">
-        <a
-          className="App-link"
-          href="https://emergent.sh"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <img src="https://avatars.githubusercontent.com/in/1201222?s=120&u=2686cf91179bbafbc7a71bfbc43004cf9ae1acea&v=4" />
-        </a>
-        <p className="mt-5">Building something incredible ~!</p>
-      </header>
-    </div>
-  );
-};
+// Layout for public pages
+const PublicLayout = ({ children }) => (
+  <>
+    <Navbar />
+    <main>{children}</main>
+    <Footer />
+  </>
+);
 
 function App() {
   return (
-    <div className="App">
+    <AuthProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Home />}>
-            <Route index element={<Home />} />
-          </Route>
+          {/* Public Routes */}
+          <Route path="/" element={<PublicLayout><Home /></PublicLayout>} />
+          <Route path="/flavors" element={<PublicLayout><NaturalFlavors /></PublicLayout>} />
+          <Route path="/mission" element={<PublicLayout><OurMission /></PublicLayout>} />
+          <Route path="/about" element={<PublicLayout><AboutUs /></PublicLayout>} />
+          <Route path="/contact" element={<PublicLayout><ContactUs /></PublicLayout>} />
+
+          {/* Admin Routes */}
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin/dashboard" element={
+            <ProtectedRoute><AdminDashboard /></ProtectedRoute>
+          } />
+          <Route path="/admin/content" element={
+            <ProtectedRoute><ContentManager /></ProtectedRoute>
+          } />
+          <Route path="/admin/flavors" element={
+            <ProtectedRoute><FlavorsManager /></ProtectedRoute>
+          } />
+          <Route path="/admin/submissions" element={
+            <ProtectedRoute><SubmissionsManager /></ProtectedRoute>
+          } />
         </Routes>
       </BrowserRouter>
-    </div>
+    </AuthProvider>
   );
 }
 
