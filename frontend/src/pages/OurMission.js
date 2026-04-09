@@ -78,7 +78,7 @@ We're committed to using only the finest natural ingredients, traditional fermen
             >
               <div className="aspect-square rounded-3xl overflow-hidden bg-[#2B3033]">
                 <img
-                  src="https://images.pexels.com/photos/8475719/pexels-photo-8475719.jpeg"
+                  src="https://images.unsplash.com/photo-1645387492022-d068372be1e5?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA3MDR8MHwxfHNlYXJjaHwyfHxmZXJtZW50ZWQlMjBkcmlua3MlMjBrb21idWNoYSUyMGJvdHRsZXMlMjBjb2xvcmZ1bHxlbnwwfHx8fDE3NzU3NjI4ODR8MA&ixlib=rb-4.1.0&q=85"
                   alt="Zymly Mission"
                   className="w-full h-full object-cover opacity-80"
                 />
