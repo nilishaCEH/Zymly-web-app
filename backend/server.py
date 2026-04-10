@@ -424,10 +424,6 @@ async def startup_event():
     
     logger.info("Startup complete - database seeded")
     
-    # Write test credentials
-    Path("/app/memory").mkdir(exist_ok=True)
-    with open("/app/memory/test_credentials.md", "w") as f:
-        f.write(f"# Test Credentials\n\n## Admin\n- Email: {admin_email}\n- Password: {admin_password}\n- Role: admin\n\n## Endpoints\n- Login: POST /api/auth/login\n- Me: GET /api/auth/me\n- Logout: POST /api/auth/logout\n")
 
 @app.on_event("shutdown")
 async def shutdown_db_client():
