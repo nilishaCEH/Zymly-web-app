@@ -342,10 +342,16 @@ api_router.include_router(submissions_router)
 app.include_router(api_router)
 
 # CORS
+allowed_origins_raw = os.getenv(
+    "ALLOWED_ORIGINS",
+    "http://localhost:3000"
+)
+allowed_origins = [o.strip() for o in allowed_origins_raw.split(",")]
+
 app.add_middleware(
     CORSMiddleware,
+    allow_origins=allowed_origins,
     allow_credentials=True,
-    allow_origins=["*"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
