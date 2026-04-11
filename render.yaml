@@ -17,3 +17,5 @@ services:
     envVars:
       - key: ALLOWED_ORIGINS
         value: https://zymly.in,https://www.zymly.in
+      - key: ENVIRONMENT
+        value: production

@@ -33,8 +33,11 @@ def get_jwt_secret() -> str:
 
 # Resend config
 resend.api_key = os.environ.get("RESEND_API_KEY", "")
-SENDER_EMAIL = os.environ.get("SENDER_EMAIL", "onboarding@resend.dev")
+SENDER_EMAIL = os.environ.get("SENDER_EMAIL", "")
 CONTACT_EMAIL = os.environ.get("CONTACT_EMAIL", "support@zymly.in")
+
+# Cookie security: use SameSite=None + Secure for cross-origin (prod) or Lax for local dev
+IS_PRODUCTION = os.environ.get("ENVIRONMENT", "development").lower() == "production"
 
 # Create the main app
 app = FastAPI()
@@ -195,8 +198,10 @@ async def login(credentials: AdminLogin, response: Response):
     access_token = create_access_token(user["id"], user["email"])
     refresh_token = create_refresh_token(user["id"])
     
-    response.set_cookie(key="access_token", value=access_token, httponly=True, secure=False, samesite="lax", max_age=86400, path="/")
-    response.set_cookie(key="refresh_token", value=refresh_token, httponly=True, secure=False, samesite="lax", max_age=604800, path="/")
+    cookie_secure = IS_PRODUCTION
+    cookie_samesite = "none" if IS_PRODUCTION else "lax"
+    response.set_cookie(key="access_token", value=access_token, httponly=True, secure=cookie_secure, samesite=cookie_samesite, max_age=86400, path="/")
+    response.set_cookie(key="refresh_token", value=refresh_token, httponly=True, secure=cookie_secure, samesite=cookie_samesite, max_age=604800, path="/")
     
     return {
         "id": user["id"],
@@ -283,32 +288,37 @@ async def submit_contact(form: ContactForm):
     await db.contact_submissions.insert_one(doc)
     
     # Send email via Resend
-    try:
-        html_content = f"""
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-            <h2 style="color: #2B3033;">New Contact Form Submission</h2>
-            <div style="background: #F2EFE8; padding: 20px; border-radius: 8px;">
-                <p><strong>Name:</strong> {form.name}</p>
-                <p><strong>Email:</strong> {form.email}</p>
-                <p><strong>Phone:</strong> {form.phone or 'Not provided'}</p>
-                <p><strong>Message:</strong></p>
-                <p style="white-space: pre-wrap;">{form.message}</p>
+    if not resend.api_key:
+        logger.warning("RESEND_API_KEY not set — skipping email notification")
+    elif not SENDER_EMAIL:
+        logger.warning("SENDER_EMAIL not set — skipping email notification")
+    else:
+        try:
+            html_content = f"""
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                <h2 style="color: #2B3033;">New Contact Form Submission</h2>
+                <div style="background: #F2EFE8; padding: 20px; border-radius: 8px;">
+                    <p><strong>Name:</strong> {form.name}</p>
+                    <p><strong>Email:</strong> {form.email}</p>
+                    <p><strong>Phone:</strong> {form.phone or 'Not provided'}</p>
+                    <p><strong>Message:</strong></p>
+                    <p style="white-space: pre-wrap;">{form.message}</p>
+                </div>
+                <p style="color: #666; font-size: 12px; margin-top: 20px;">
+                    Sent from Zymly Website Contact Form
+                </p>
             </div>
-            <p style="color: #666; font-size: 12px; margin-top: 20px;">
-                Sent from Zymly Website Contact Form
-            </p>
-        </div>
-        """
-        params = {
-            "from": SENDER_EMAIL,
-            "to": [CONTACT_EMAIL],
-            "subject": f"New Contact: {form.name}",
-            "html": html_content
-        }
-        await asyncio.to_thread(resend.Emails.send, params)
-        logger.info(f"Email sent for contact submission from {form.email}")
-    except Exception as e:
-        logger.error(f"Failed to send email: {str(e)}")
+            """
+            params = {
+                "from": SENDER_EMAIL,
+                "to": [CONTACT_EMAIL],
+                "subject": f"New Contact: {form.name}",
+                "html": html_content
+            }
+            await asyncio.to_thread(resend.Emails.send, params)
+            logger.info(f"Email sent for contact submission from {form.email}")
+        except Exception as e:
+            logger.error(f"Failed to send email: {str(e)}")
     
     return {"message": "Thank you for contacting us! We'll get back to you soon."}
 
