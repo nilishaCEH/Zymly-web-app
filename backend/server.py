@@ -395,6 +395,8 @@ async def startup_event():
         {"page_name": "about", "section": "story", "title": "Our Story", "subtitle": "From Kitchen Experiments to Your Glass", "content": "Zymly started as a passion project in a small kitchen, where the love for traditional fermentation met modern health consciousness. What began as making probiotic drinks for friends and family has grown into a mission to share the goodness of naturally fermented beverages with everyone.", "image_url": "https://images.unsplash.com/photo-1683912568493-9a6a94aacfe3"},
         {"page_name": "about", "section": "team", "title": "The Team", "content": "We're a small but dedicated team of health enthusiasts, fermentation geeks, and flavor artists. Every bottle of Zymly is crafted with the same care and attention as the very first batch."},
         {"page_name": "contact", "section": "info", "title": "Get in Touch", "subtitle": "We'd Love to Hear From You", "content": "Have questions about our products, want to collaborate, or just want to say hi? Drop us a message and we'll get back to you as soon as possible."},
+        {"page_name": "flavors", "section": "hero", "title": "Natural Flavors", "subtitle": "Our Collection", "content": "Each flavor is carefully crafted using the finest natural ingredients and traditional fermentation methods. Discover your perfect sip."},
+        {"page_name": "flavors", "section": "grid", "title": "Explore All Flavors"},
     ]
     
     for content_data in default_content:
