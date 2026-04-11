@@ -234,13 +234,13 @@ const ContactUs = () => {
                     <div>
                       <p className="font-medium mb-1">Instagram</p>
                       <a 
-                        href="https://instagram.com/zymly" 
+                        href="https://www.instagram.com/go_zymly"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-[#E0D8C8]/70 hover:text-[#C8A25F] transition-colors"
                         data-testid="contact-instagram-link"
                       >
-                        @zymly
+                        @go_zymly
                       </a>
                     </div>
                   </div>
