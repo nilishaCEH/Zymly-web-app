@@ -19,11 +19,12 @@ const ContactUs = () => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
+  const [serverReady, setServerReady] = useState(false);
 
   useEffect(() => {
     const fetchContent = async () => {
       try {
-        const response = await axios.get(`${API}/content/contact`);
+        const response = await axios.get(`${API}/content/contact`, { timeout: 90000 });
         const contentMap = {};
         response.data.forEach(item => {
           contentMap[item.section] = item;
@@ -31,6 +32,8 @@ const ContactUs = () => {
         setContent(contentMap);
       } catch (err) {
         console.error('Error fetching content:', err);
+      } finally {
+        setServerReady(true);
       }
     };
     fetchContent();
@@ -186,11 +189,16 @@ const ContactUs = () => {
 
                     <button
                       type="submit"
-                      disabled={loading}
-                      className="btn-primary w-full flex items-center justify-center gap-2"
+                      disabled={loading || !serverReady}
+                      className="btn-primary w-full flex items-center justify-center gap-2 disabled:opacity-60"
                       data-testid="contact-submit-button"
                     >
-                      {loading ? (
+                      {!serverReady ? (
+                        <>
+                          <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                          Connecting...
+                        </>
+                      ) : loading ? (
                         <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
                       ) : (
                         <>

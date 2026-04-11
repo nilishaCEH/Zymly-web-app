@@ -355,6 +355,10 @@ async def delete_submission(submission_id: str, user: dict = Depends(get_current
 async def root():
     return {"message": "Zymly API is running"}
 
+@api_router.get("/health")
+async def health():
+    return {"status": "ok"}
+
 # Include routers
 api_router.include_router(auth_router)
 api_router.include_router(content_router)

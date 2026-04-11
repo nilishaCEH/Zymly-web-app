@@ -19,3 +19,4 @@ services:
         value: https://zymly.in,https://www.zymly.in
       - key: ENVIRONMENT
         value: production
+    healthCheckPath: /api/health
