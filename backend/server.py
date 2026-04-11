@@ -14,9 +14,7 @@ import uuid
 from datetime import datetime, timezone, timedelta
 import bcrypt
 import jwt
-import smtplib
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
+import resend
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -33,30 +31,22 @@ JWT_ALGORITHM = "HS256"
 def get_jwt_secret() -> str:
     return os.environ["JWT_SECRET"]
 
-# Email config (SMTP — works with GoDaddy Titan and most providers)
-SMTP_HOST = os.environ.get("SMTP_HOST", "smtp.titan.email")
-SMTP_PORT = int(os.environ.get("SMTP_PORT", "587"))
-SMTP_USER = os.environ.get("SMTP_USER", "")        # your full email, e.g. support@zymly.in
-SMTP_PASSWORD = os.environ.get("SMTP_PASSWORD", "")
+# Email config via Resend (HTTP-based, works on Render)
+resend.api_key = os.environ.get("RESEND_API_KEY", "")
+SENDER_EMAIL = os.environ.get("SENDER_EMAIL", "")
 CONTACT_EMAIL = os.environ.get("CONTACT_EMAIL", "support@zymly.in")
 
 
-async def send_email_smtp(to: str, subject: str, html: str):
-    if not SMTP_USER or not SMTP_PASSWORD:
-        logger.warning("SMTP_USER or SMTP_PASSWORD not set — skipping email notification")
+async def send_email_resend(to: str, subject: str, html: str):
+    if not resend.api_key:
+        logger.warning("RESEND_API_KEY not set — skipping email")
         return
-    msg = MIMEMultipart("alternative")
-    msg["Subject"] = subject
-    msg["From"] = SMTP_USER
-    msg["To"] = to
-    msg.attach(MIMEText(html, "html"))
-    def _send():
-        with smtplib.SMTP(SMTP_HOST, SMTP_PORT, timeout=15) as server:
-            server.ehlo()
-            server.starttls()
-            server.login(SMTP_USER, SMTP_PASSWORD)
-            server.sendmail(SMTP_USER, to, msg.as_string())
-    await asyncio.to_thread(_send)
+    if not SENDER_EMAIL:
+        logger.warning("SENDER_EMAIL not set — skipping email")
+        return
+    params = {"from": SENDER_EMAIL, "to": [to], "subject": subject, "html": html}
+    await asyncio.to_thread(resend.Emails.send, params)
+    logger.info(f"Email sent to {to}")
 
 # Cookie security: use SameSite=None + Secure for cross-origin (prod) or Lax for local dev
 IS_PRODUCTION = os.environ.get("ENVIRONMENT", "development").lower() == "production"
@@ -324,7 +314,7 @@ async def submit_contact(form: ContactForm, background_tasks: BackgroundTasks):
         </p>
     </div>
     """
-    background_tasks.add_task(send_email_smtp, CONTACT_EMAIL, f"New Contact: {form.name}", html_content)
+    background_tasks.add_task(send_email_resend, CONTACT_EMAIL, f"New Contact: {form.name}", html_content)
 
     return {"message": "Thank you for contacting us! We'll get back to you soon."}
 
@@ -362,21 +352,18 @@ async def health():
 @api_router.get("/test-email")
 async def test_email():
     """Admin-only: test SMTP configuration and return detailed error if it fails."""
-    if not SMTP_USER or not SMTP_PASSWORD:
-        return {"status": "error", "message": "SMTP_USER or SMTP_PASSWORD not set in environment"}
+    if not resend.api_key:
+        return {"status": "error", "message": "RESEND_API_KEY not set in environment"}
+    if not SENDER_EMAIL:
+        return {"status": "error", "message": "SENDER_EMAIL not set in environment"}
     try:
-        msg = MIMEMultipart("alternative")
-        msg["Subject"] = "Zymly SMTP Test"
-        msg["From"] = SMTP_USER
-        msg["To"] = CONTACT_EMAIL
-        msg.attach(MIMEText("<p>SMTP is working correctly.</p>", "html"))
-        def _send():
-            with smtplib.SMTP(SMTP_HOST, SMTP_PORT, timeout=15) as server:
-                server.ehlo()
-                server.starttls()
-                server.login(SMTP_USER, SMTP_PASSWORD)
-                server.sendmail(SMTP_USER, CONTACT_EMAIL, msg.as_string())
-        await asyncio.to_thread(_send)
+        params = {
+            "from": SENDER_EMAIL,
+            "to": [CONTACT_EMAIL],
+            "subject": "Zymly Email Test",
+            "html": "<p>Resend is working correctly.</p>"
+        }
+        await asyncio.to_thread(resend.Emails.send, params)
         return {"status": "success", "message": f"Test email sent to {CONTACT_EMAIL}"}
     except Exception as e:
         return {"status": "error", "message": str(e)}
