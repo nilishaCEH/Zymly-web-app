@@ -8,6 +8,7 @@ const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 const NaturalFlavors = () => {
   const [flavors, setFlavors] = useState([]);
   const [selectedFlavor, setSelectedFlavor] = useState(null);
+  const [content, setContent] = useState({});
 
   useEffect(() => {
     const fetchFlavors = async () => {
@@ -21,7 +22,22 @@ const NaturalFlavors = () => {
         console.error('Error fetching flavors:', error);
       }
     };
+
+    const fetchContent = async () => {
+      try {
+        const response = await axios.get(`${API}/content/flavors`);
+        const contentMap = {};
+        response.data.forEach(item => {
+          contentMap[item.section] = item;
+        });
+        setContent(contentMap);
+      } catch (error) {
+        console.error('Error fetching flavors page content:', error);
+      }
+    };
+
     fetchFlavors();
+    fetchContent();
   }, []);
 
   return (
@@ -34,13 +50,14 @@ const NaturalFlavors = () => {
             animate={{ opacity: 1, y: 0 }}
             className="text-center max-w-3xl mx-auto mb-16"
           >
-            <span className="text-[#C8A25F] font-medium mb-2 block">Our Collection</span>
+            <span className="text-[#C8A25F] font-medium mb-2 block">
+              {content.hero?.subtitle || 'Our Collection'}
+            </span>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-[#2B3033] tracking-tighter mb-6">
-              Natural Flavors
+              {content.hero?.title || 'Natural Flavors'}
             </h1>
             <p className="text-lg text-[#2B3033]/70 leading-relaxed">
-              Each flavor is carefully crafted using the finest natural ingredients and traditional fermentation methods. 
-              Discover your perfect sip.
+              {content.hero?.content || 'Each flavor is carefully crafted using the finest natural ingredients and traditional fermentation methods. Discover your perfect sip.'}
             </p>
           </motion.div>
 
@@ -63,7 +80,7 @@ const NaturalFlavors = () => {
                   data-testid={`flavor-selector-${index}`}
                 >
                   <div className="flex items-center gap-4">
-                    <div 
+                    <div
                       className="w-14 h-14 rounded-full flex-shrink-0"
                       style={{ backgroundColor: flavor.color }}
                     ></div>
@@ -88,7 +105,7 @@ const NaturalFlavors = () => {
                 className="bg-[#F2EFE8] rounded-3xl overflow-hidden"
                 data-testid="flavor-detail"
               >
-                <div 
+                <div
                   className="aspect-video relative"
                   style={{ background: `linear-gradient(135deg, ${selectedFlavor.color}40, ${selectedFlavor.color}10)` }}
                 >
@@ -99,14 +116,14 @@ const NaturalFlavors = () => {
                   />
                 </div>
                 <div className="p-8">
-                  <div 
+                  <div
                     className="inline-block w-4 h-4 rounded-full mb-4"
                     style={{ backgroundColor: selectedFlavor.color }}
                   ></div>
                   <h2 className="text-3xl font-bold text-[#2B3033] mb-2">{selectedFlavor.name}</h2>
                   <p className="text-[#C8A25F] font-medium mb-4">{selectedFlavor.tagline}</p>
                   <p className="text-[#2B3033]/70 leading-relaxed mb-6">{selectedFlavor.description}</p>
-                  
+
                   {selectedFlavor.benefits && selectedFlavor.benefits.length > 0 && (
                     <div>
                       <h4 className="font-bold text-[#2B3033] mb-3">Benefits</h4>
@@ -133,7 +150,7 @@ const NaturalFlavors = () => {
       <section className="py-16 bg-[#F2EFE8]" data-testid="flavors-grid-section">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-2xl sm:text-3xl font-bold text-[#2B3033] mb-8 text-center">
-            Explore All Flavors
+            {content.grid?.title || 'Explore All Flavors'}
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
             {flavors.map((flavor, index) => (
@@ -146,7 +163,7 @@ const NaturalFlavors = () => {
                 className="bg-white rounded-2xl overflow-hidden card-hover"
                 data-testid={`flavor-grid-card-${index}`}
               >
-                <div 
+                <div
                   className="aspect-square relative"
                   style={{ background: `linear-gradient(180deg, ${flavor.color}30, transparent)` }}
                 >
@@ -157,7 +174,7 @@ const NaturalFlavors = () => {
                   />
                 </div>
                 <div className="p-4 text-center">
-                  <div 
+                  <div
                     className="w-3 h-3 rounded-full mx-auto mb-2"
                     style={{ backgroundColor: flavor.color }}
                   ></div>
