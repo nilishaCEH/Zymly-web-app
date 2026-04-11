@@ -86,7 +86,9 @@ class Flavor(BaseModel):
     description: str
     image_url: str
     color: str
+    accent_color: str = ""
     benefits: List[str] = []
+    tags: List[str] = []
     order: int = 0
     is_active: bool = True
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
@@ -97,7 +99,9 @@ class FlavorCreate(BaseModel):
     description: str
     image_url: str
     color: str
+    accent_color: str = ""
     benefits: List[str] = []
+    tags: List[str] = []
     order: int = 0
     is_active: bool = True
 
@@ -107,7 +111,9 @@ class FlavorUpdate(BaseModel):
     description: Optional[str] = None
     image_url: Optional[str] = None
     color: Optional[str] = None
+    accent_color: Optional[str] = None
     benefits: Optional[List[str]] = None
+    tags: Optional[List[str]] = None
     order: Optional[int] = None
     is_active: Optional[bool] = None
 
@@ -409,11 +415,11 @@ async def startup_event():
     
     # Seed default flavors
     default_flavors = [
-        {"name": "Simply Lemon", "tagline": "Pure Citrus Bliss", "description": "A refreshing burst of natural lemon with the perfect balance of tangy and sweet. Our classic flavor that started it all.", "image_url": "https://images.pexels.com/photos/12739023/pexels-photo-12739023.jpeg", "color": "#F4D03F", "benefits": ["Rich in Vitamin C", "Aids Digestion", "Natural Energy Boost"], "order": 1},
-        {"name": "Ginger Lemon", "tagline": "Zesty & Warming", "description": "The perfect marriage of zingy ginger and bright lemon. A warming combination that soothes and invigorates.", "image_url": "https://images.pexels.com/photos/10112136/pexels-photo-10112136.jpeg", "color": "#E67E22", "benefits": ["Anti-inflammatory", "Immune Booster", "Digestive Aid"], "order": 2},
-        {"name": "Cinne Pineapple", "tagline": "Tropical Spice Fusion", "description": "Sweet tropical pineapple meets warm cinnamon in this exotic blend. A taste of paradise with a cozy twist.", "image_url": "https://images.pexels.com/photos/8475719/pexels-photo-8475719.jpeg", "color": "#F1C40F", "benefits": ["Metabolism Boost", "Blood Sugar Balance", "Tropical Goodness"], "order": 3},
-        {"name": "Tangy Orange", "tagline": "Sunshine in a Bottle", "description": "Bright, bold, and bursting with orange goodness. Like liquid sunshine for your gut.", "image_url": "https://images.pexels.com/photos/8475719/pexels-photo-8475719.jpeg", "color": "#E67E22", "benefits": ["Vitamin C Rich", "Mood Lifter", "Refreshing"], "order": 4},
-        {"name": "Berry Bliss", "tagline": "Berrylicious Delight", "description": "A medley of berries creating a symphony of flavors. Deep, rich, and packed with antioxidants.", "image_url": "https://images.pexels.com/photos/8475719/pexels-photo-8475719.jpeg", "color": "#E74C3C", "benefits": ["Antioxidant Powerhouse", "Heart Healthy", "Brain Boost"], "order": 5},
+        {"name": "Simply Lemon", "tagline": "Pure Citrus Bliss", "description": "A refreshing burst of natural lemon with the perfect balance of tangy and sweet. Our classic flavor that started it all.", "image_url": "https://images.pexels.com/photos/12739023/pexels-photo-12739023.jpeg", "color": "#F4D03F", "accent_color": "#B8960A", "benefits": ["Rich in Vitamin C", "Aids Digestion", "Natural Energy Boost"], "tags": ["Bestseller", "Classic"], "order": 1},
+        {"name": "Ginger Lemon", "tagline": "Zesty & Warming", "description": "The perfect marriage of zingy ginger and bright lemon. A warming combination that soothes and invigorates.", "image_url": "https://images.pexels.com/photos/10112136/pexels-photo-10112136.jpeg", "color": "#E67E22", "accent_color": "#A85A10", "benefits": ["Anti-inflammatory", "Immune Booster", "Digestive Aid"], "tags": ["Spicy", "Immunity"], "order": 2},
+        {"name": "Cinne Pineapple", "tagline": "Tropical Spice Fusion", "description": "Sweet tropical pineapple meets warm cinnamon in this exotic blend. A taste of paradise with a cozy twist.", "image_url": "https://images.pexels.com/photos/8475719/pexels-photo-8475719.jpeg", "color": "#F1C40F", "accent_color": "#A87D00", "benefits": ["Metabolism Boost", "Blood Sugar Balance", "Tropical Goodness"], "tags": ["Tropical", "New"], "order": 3},
+        {"name": "Tangy Orange", "tagline": "Sunshine in a Bottle", "description": "Bright, bold, and bursting with orange goodness. Like liquid sunshine for your gut.", "image_url": "https://images.pexels.com/photos/8475719/pexels-photo-8475719.jpeg", "color": "#E67E22", "accent_color": "#A85A10", "benefits": ["Vitamin C Rich", "Mood Lifter", "Refreshing"], "tags": ["Refreshing", "Summer"], "order": 4},
+        {"name": "Berry Bliss", "tagline": "Berrylicious Delight", "description": "A medley of berries creating a symphony of flavors. Deep, rich, and packed with antioxidants.", "image_url": "https://images.pexels.com/photos/8475719/pexels-photo-8475719.jpeg", "color": "#E74C3C", "accent_color": "#9B1C1C", "benefits": ["Antioxidant Powerhouse", "Heart Healthy", "Brain Boost"], "tags": ["Antioxidant", "Fan Favourite"], "order": 5},
     ]
     
     for flavor_data in default_flavors:

@@ -15,9 +15,7 @@ const NaturalFlavors = () => {
       try {
         const response = await axios.get(`${API}/flavors/active`);
         setFlavors(response.data);
-        if (response.data.length > 0) {
-          setSelectedFlavor(response.data[0]);
-        }
+        if (response.data.length > 0) setSelectedFlavor(response.data[0]);
       } catch (error) {
         console.error('Error fetching flavors:', error);
       }
@@ -40,6 +38,8 @@ const NaturalFlavors = () => {
     fetchContent();
   }, []);
 
+  const accentColor = (flavor) => flavor?.accent_color || '#2B3033';
+
   return (
     <div className="min-h-screen bg-[#E0D8C8] pt-20" data-testid="flavors-page">
       {/* Hero */}
@@ -61,7 +61,7 @@ const NaturalFlavors = () => {
             </p>
           </motion.div>
 
-          {/* Flavor Grid */}
+          {/* Flavor Selector + Detail */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Flavor Cards */}
             <div className="space-y-4">
@@ -90,9 +90,9 @@ const NaturalFlavors = () => {
                         {flavor.tagline}
                       </p>
                     </div>
-                  </div>
-                </motion.div>
-              ))}
+                  </motion.div>
+                );
+              })}
             </div>
 
             {/* Selected Flavor Detail */}
@@ -121,7 +121,7 @@ const NaturalFlavors = () => {
                     style={{ backgroundColor: selectedFlavor.color }}
                   ></div>
                   <h2 className="text-3xl font-bold text-[#2B3033] mb-2">{selectedFlavor.name}</h2>
-                  <p className="text-[#C8A25F] font-medium mb-4">{selectedFlavor.tagline}</p>
+                  <p className="font-medium mb-4" style={{ color: accentColor(selectedFlavor) }}>{selectedFlavor.tagline}</p>
                   <p className="text-[#2B3033]/70 leading-relaxed mb-6">{selectedFlavor.description}</p>
 
                   {selectedFlavor.benefits && selectedFlavor.benefits.length > 0 && (
@@ -130,8 +130,11 @@ const NaturalFlavors = () => {
                       <ul className="space-y-2">
                         {selectedFlavor.benefits.map((benefit, index) => (
                           <li key={index} className="flex items-center gap-3 text-[#2B3033]/80">
-                            <div className="w-5 h-5 rounded-full bg-[#C8A25F]/20 flex items-center justify-center flex-shrink-0">
-                              <Check size={12} className="text-[#C8A25F]" />
+                            <div
+                              className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0"
+                              style={{ backgroundColor: `${selectedFlavor.color}30` }}
+                            >
+                              <Check size={12} style={{ color: accentColor(selectedFlavor) }} />
                             </div>
                             {benefit}
                           </li>
@@ -160,7 +163,8 @@ const NaturalFlavors = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.05 }}
-                className="bg-white rounded-2xl overflow-hidden card-hover"
+                onClick={() => { setSelectedFlavor(flavor); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                className="bg-white rounded-2xl overflow-hidden card-hover cursor-pointer"
                 data-testid={`flavor-grid-card-${index}`}
               >
                 <div
@@ -180,6 +184,19 @@ const NaturalFlavors = () => {
                   ></div>
                   <h3 className="font-bold text-[#2B3033]">{flavor.name}</h3>
                   <p className="text-xs text-[#2B3033]/60 mt-1">{flavor.tagline}</p>
+                  {flavor.tags && flavor.tags.length > 0 && (
+                    <div className="flex flex-wrap gap-1 justify-center mt-2">
+                      {flavor.tags.map((tag, i) => (
+                        <span
+                          key={i}
+                          className="text-xs px-2 py-0.5 rounded-full font-medium"
+                          style={{ backgroundColor: `${flavor.color}20`, color: accentColor(flavor) }}
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </motion.div>
             ))}
