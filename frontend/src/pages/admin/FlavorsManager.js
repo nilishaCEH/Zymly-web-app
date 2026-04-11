@@ -225,8 +225,8 @@ const FlavorsManager = () => {
 
                 {/* Color swatches preview */}
                 <div className="hidden sm:flex items-center gap-1">
-                  <div className="w-6 h-6 rounded-full border-2 border-white shadow-sm" style={{ backgroundColor: flavor.color }} title="Flavor color" />
-                  <div className="w-6 h-6 rounded-full border-2 border-white shadow-sm" style={{ backgroundColor: flavor.accent_color || '#2B3033' }} title="Accent color" />
+                  <div className="w-6 h-6 rounded-full border-2 border-white shadow-sm" style={{ backgroundColor: flavor.color }} title="Flavor color"></div>
+                  <div className="w-6 h-6 rounded-full border-2 border-white shadow-sm" style={{ backgroundColor: flavor.accent_color || '#2B3033' }} title="Accent color"></div>
                 </div>
 
                 <div className="flex items-center gap-4">
@@ -370,7 +370,7 @@ const FlavorsManager = () => {
                   className="mt-3 flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium"
                   style={{ backgroundColor: formData.accent_color || '#2B3033', color: '#E0D8C8' }}
                 >
-                  <div className="w-6 h-6 rounded-full" style={{ backgroundColor: formData.color }} />
+                  <div className="w-6 h-6 rounded-full" style={{ backgroundColor: formData.color }}></div>
                   <span>Selected card preview</span>
                 </div>
               </div>
