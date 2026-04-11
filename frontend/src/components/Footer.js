@@ -20,7 +20,7 @@ const Footer = () => {
             </p>
             <div className="flex items-center gap-4 mt-6">
               <a
-                href="https://instagram.com/zymly"
+                href="https://www.instagram.com/go_zymly"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-10 h-10 rounded-full bg-[#E0D8C8]/10 flex items-center justify-center hover:bg-[#C8A25F] transition-colors"
