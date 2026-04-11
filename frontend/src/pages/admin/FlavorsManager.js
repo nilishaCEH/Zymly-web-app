@@ -25,13 +25,16 @@ const FlavorsManager = () => {
     description: '',
     image_url: '',
     color: '#C8A25F',
+    accent_color: '#2B3033',
     benefits: [],
+    tags: [],
     order: 0,
     is_active: true
   };
 
   const [formData, setFormData] = useState(emptyFlavor);
   const [benefitInput, setBenefitInput] = useState('');
+  const [tagInput, setTagInput] = useState('');
 
   useEffect(() => {
     fetchFlavors();
@@ -57,7 +60,9 @@ const FlavorsManager = () => {
         description: flavor.description,
         image_url: flavor.image_url,
         color: flavor.color,
+        accent_color: flavor.accent_color || '#2B3033',
         benefits: flavor.benefits || [],
+        tags: flavor.tags || [],
         order: flavor.order,
         is_active: flavor.is_active
       });
@@ -73,23 +78,29 @@ const FlavorsManager = () => {
     setEditingFlavor(null);
     setFormData(emptyFlavor);
     setBenefitInput('');
+    setTagInput('');
   };
 
   const addBenefit = () => {
     if (benefitInput.trim()) {
-      setFormData(prev => ({
-        ...prev,
-        benefits: [...prev.benefits, benefitInput.trim()]
-      }));
+      setFormData(prev => ({ ...prev, benefits: [...prev.benefits, benefitInput.trim()] }));
       setBenefitInput('');
     }
   };
 
   const removeBenefit = (index) => {
-    setFormData(prev => ({
-      ...prev,
-      benefits: prev.benefits.filter((_, i) => i !== index)
-    }));
+    setFormData(prev => ({ ...prev, benefits: prev.benefits.filter((_, i) => i !== index) }));
+  };
+
+  const addTag = () => {
+    if (tagInput.trim()) {
+      setFormData(prev => ({ ...prev, tags: [...prev.tags, tagInput.trim()] }));
+      setTagInput('');
+    }
+  };
+
+  const removeTag = (index) => {
+    setFormData(prev => ({ ...prev, tags: prev.tags.filter((_, i) => i !== index) }));
   };
 
   const handleSubmit = async (e) => {
@@ -117,7 +128,6 @@ const FlavorsManager = () => {
 
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this flavor?')) return;
-    
     try {
       await axios.delete(`${API}/flavors/${id}`, { withCredentials: true });
       fetchFlavors();
@@ -191,15 +201,32 @@ const FlavorsManager = () => {
                 <div className="text-[#2B3033]/30 cursor-grab">
                   <GripVertical size={20} />
                 </div>
-                
-                <div 
+
+                <div
                   className="w-12 h-12 rounded-full flex-shrink-0"
                   style={{ backgroundColor: flavor.color }}
                 ></div>
 
                 <div className="flex-1 min-w-0">
-                  <h3 className="font-bold text-[#2B3033]">{flavor.name}</h3>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <h3 className="font-bold text-[#2B3033]">{flavor.name}</h3>
+                    {flavor.tags && flavor.tags.map((tag, i) => (
+                      <span
+                        key={i}
+                        className="text-xs px-2 py-0.5 rounded-full font-medium"
+                        style={{ backgroundColor: `${flavor.color}25`, color: flavor.accent_color || flavor.color }}
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
                   <p className="text-sm text-[#2B3033]/60 truncate">{flavor.tagline}</p>
+                </div>
+
+                {/* Color swatches preview */}
+                <div className="hidden sm:flex items-center gap-1">
+                  <div className="w-6 h-6 rounded-full border-2 border-white shadow-sm" style={{ backgroundColor: flavor.color }} title="Flavor color" />
+                  <div className="w-6 h-6 rounded-full border-2 border-white shadow-sm" style={{ backgroundColor: flavor.accent_color || '#2B3033' }} title="Accent color" />
                 </div>
 
                 <div className="flex items-center gap-4">
@@ -236,7 +263,7 @@ const FlavorsManager = () => {
 
       {/* Modal */}
       <Dialog open={modalOpen} onOpenChange={setModalOpen}>
-        <DialogContent className="max-w-2xl bg-[#F2EFE8] border-[#2B3033]/10">
+        <DialogContent className="max-w-2xl bg-[#F2EFE8] border-[#2B3033]/10 max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="text-[#2B3033]">
               {editingFlavor ? 'Edit Flavor' : 'Add New Flavor'}
@@ -245,6 +272,8 @@ const FlavorsManager = () => {
 
           <form onSubmit={handleSubmit} className="space-y-6" data-testid="flavor-form">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+              {/* Name */}
               <div>
                 <Label className="text-[#2B3033]">Name *</Label>
                 <Input
@@ -256,6 +285,7 @@ const FlavorsManager = () => {
                 />
               </div>
 
+              {/* Tagline */}
               <div>
                 <Label className="text-[#2B3033]">Tagline *</Label>
                 <Input
@@ -267,6 +297,7 @@ const FlavorsManager = () => {
                 />
               </div>
 
+              {/* Description */}
               <div className="md:col-span-2">
                 <Label className="text-[#2B3033]">Description *</Label>
                 <Textarea
@@ -279,7 +310,8 @@ const FlavorsManager = () => {
                 />
               </div>
 
-              <div>
+              {/* Image URL */}
+              <div className="md:col-span-2">
                 <Label className="text-[#2B3033]">Image URL *</Label>
                 <Input
                   required
@@ -288,26 +320,62 @@ const FlavorsManager = () => {
                   className="mt-2 bg-white border-[#2B3033]/20"
                   data-testid="flavor-image-input"
                 />
+                {formData.image_url && (
+                  <img src={formData.image_url} alt="Preview" className="mt-2 h-24 w-full object-cover rounded-lg" />
+                )}
               </div>
 
+              {/* Flavor Color */}
               <div>
-                <Label className="text-[#2B3033]">Color</Label>
-                <div className="flex items-center gap-2 mt-2">
+                <Label className="text-[#2B3033]">Flavor Color</Label>
+                <p className="text-xs text-[#2B3033]/50 mb-2">Used for the color dot and gradient</p>
+                <div className="flex items-center gap-2">
                   <input
                     type="color"
                     value={formData.color}
                     onChange={(e) => setFormData(prev => ({ ...prev, color: e.target.value }))}
-                    className="w-12 h-10 rounded cursor-pointer"
+                    className="w-12 h-10 rounded cursor-pointer border-0"
                     data-testid="flavor-color-input"
                   />
                   <Input
                     value={formData.color}
                     onChange={(e) => setFormData(prev => ({ ...prev, color: e.target.value }))}
                     className="flex-1 bg-white border-[#2B3033]/20"
+                    placeholder="#C8A25F"
                   />
                 </div>
               </div>
 
+              {/* Accent / Button Event Color */}
+              <div>
+                <Label className="text-[#2B3033]">Accent Color</Label>
+                <p className="text-xs text-[#2B3033]/50 mb-2">Selected card highlight & tag color</p>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="color"
+                    value={formData.accent_color}
+                    onChange={(e) => setFormData(prev => ({ ...prev, accent_color: e.target.value }))}
+                    className="w-12 h-10 rounded cursor-pointer border-0"
+                    data-testid="flavor-accent-color-input"
+                  />
+                  <Input
+                    value={formData.accent_color}
+                    onChange={(e) => setFormData(prev => ({ ...prev, accent_color: e.target.value }))}
+                    className="flex-1 bg-white border-[#2B3033]/20"
+                    placeholder="#2B3033"
+                  />
+                </div>
+                {/* Live preview of selected card */}
+                <div
+                  className="mt-3 flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium"
+                  style={{ backgroundColor: formData.accent_color || '#2B3033', color: '#E0D8C8' }}
+                >
+                  <div className="w-6 h-6 rounded-full" style={{ backgroundColor: formData.color }} />
+                  <span>Selected card preview</span>
+                </div>
+              </div>
+
+              {/* Benefits */}
               <div className="md:col-span-2">
                 <Label className="text-[#2B3033]">Benefits</Label>
                 <div className="flex gap-2 mt-2">
@@ -319,30 +387,52 @@ const FlavorsManager = () => {
                     onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), addBenefit())}
                     data-testid="benefit-input"
                   />
-                  <button
-                    type="button"
-                    onClick={addBenefit}
-                    className="btn-secondary px-4"
-                    data-testid="add-benefit-button"
-                  >
+                  <button type="button" onClick={addBenefit} className="btn-secondary px-4" data-testid="add-benefit-button">
                     Add
                   </button>
                 </div>
                 <div className="flex flex-wrap gap-2 mt-3">
                   {formData.benefits.map((benefit, index) => (
-                    <span
-                      key={index}
-                      className="inline-flex items-center gap-1 px-3 py-1 bg-[#2B3033] text-[#E0D8C8] rounded-full text-sm"
-                    >
+                    <span key={index} className="inline-flex items-center gap-1 px-3 py-1 bg-[#2B3033] text-[#E0D8C8] rounded-full text-sm">
                       {benefit}
-                      <button type="button" onClick={() => removeBenefit(index)}>
-                        <X size={14} />
-                      </button>
+                      <button type="button" onClick={() => removeBenefit(index)}><X size={14} /></button>
                     </span>
                   ))}
                 </div>
               </div>
 
+              {/* Tags */}
+              <div className="md:col-span-2">
+                <Label className="text-[#2B3033]">Tags</Label>
+                <p className="text-xs text-[#2B3033]/50 mb-2">Short labels shown on the flavor grid cards (e.g. Bestseller, New, Spicy)</p>
+                <div className="flex gap-2 mt-2">
+                  <Input
+                    value={tagInput}
+                    onChange={(e) => setTagInput(e.target.value)}
+                    placeholder="Add a tag..."
+                    className="flex-1 bg-white border-[#2B3033]/20"
+                    onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), addTag())}
+                    data-testid="tag-input"
+                  />
+                  <button type="button" onClick={addTag} className="btn-secondary px-4" data-testid="add-tag-button">
+                    Add
+                  </button>
+                </div>
+                <div className="flex flex-wrap gap-2 mt-3">
+                  {formData.tags.map((tag, index) => (
+                    <span
+                      key={index}
+                      className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium"
+                      style={{ backgroundColor: `${formData.color}25`, color: formData.accent_color || '#2B3033' }}
+                    >
+                      {tag}
+                      <button type="button" onClick={() => removeTag(index)}><X size={14} /></button>
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Order & Active */}
               <div>
                 <Label className="text-[#2B3033]">Order</Label>
                 <Input
