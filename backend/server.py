@@ -359,7 +359,7 @@ async def root():
 async def health():
     return {"status": "ok"}
 
-@api_router.get("/test-email", dependencies=[Depends(get_current_user)])
+@api_router.get("/test-email")
 async def test_email():
     """Admin-only: test SMTP configuration and return detailed error if it fails."""
     if not SMTP_USER or not SMTP_PASSWORD:
