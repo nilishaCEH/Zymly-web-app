@@ -50,17 +50,21 @@ const ContactUs = () => {
     setError('');
 
     try {
-      await axios.post(`${API}/contact/submit`, formData);
+      await axios.post(`${API}/contact/submit`, formData, { timeout: 60000 });
       setSuccess(true);
       setFormData({ name: '', email: '', phone: '', message: '' });
     } catch (err) {
-      const detail = err.response?.data?.detail;
-      if (Array.isArray(detail)) {
-        setError(detail.map(e => e.msg || JSON.stringify(e)).join(' '));
-      } else if (typeof detail === 'string') {
-        setError(detail);
+      if (err.code === 'ECONNABORTED' || err.message?.includes('timeout')) {
+        setError('The server is starting up — please wait a moment and try again.');
       } else {
-        setError('Something went wrong. Please try again.');
+        const detail = err.response?.data?.detail;
+        if (Array.isArray(detail)) {
+          setError(detail.map(e => e.msg || JSON.stringify(e)).join(' '));
+        } else if (typeof detail === 'string') {
+          setError(detail);
+        } else {
+          setError('Something went wrong. Please try again.');
+        }
       }
     } finally {
       setLoading(false);
