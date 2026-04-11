@@ -359,6 +359,28 @@ async def root():
 async def health():
     return {"status": "ok"}
 
+@api_router.get("/test-email", dependencies=[Depends(get_current_user)])
+async def test_email():
+    """Admin-only: test SMTP configuration and return detailed error if it fails."""
+    if not SMTP_USER or not SMTP_PASSWORD:
+        return {"status": "error", "message": "SMTP_USER or SMTP_PASSWORD not set in environment"}
+    try:
+        msg = MIMEMultipart("alternative")
+        msg["Subject"] = "Zymly SMTP Test"
+        msg["From"] = SMTP_USER
+        msg["To"] = CONTACT_EMAIL
+        msg.attach(MIMEText("<p>SMTP is working correctly.</p>", "html"))
+        def _send():
+            with smtplib.SMTP(SMTP_HOST, SMTP_PORT, timeout=15) as server:
+                server.ehlo()
+                server.starttls()
+                server.login(SMTP_USER, SMTP_PASSWORD)
+                server.sendmail(SMTP_USER, CONTACT_EMAIL, msg.as_string())
+        await asyncio.to_thread(_send)
+        return {"status": "success", "message": f"Test email sent to {CONTACT_EMAIL}"}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
+
 # Include routers
 api_router.include_router(auth_router)
 api_router.include_router(content_router)
