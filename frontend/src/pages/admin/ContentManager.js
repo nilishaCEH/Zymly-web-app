@@ -59,7 +59,7 @@ const ContentManager = () => {
     ));
   };
 
-  const pages = ['home', 'mission', 'about', 'contact'];
+  const pages = ['home', 'mission', 'about', 'contact', 'flavors'];
 
   const getPageContent = (pageName) => content.filter(c => c.page_name === pageName);
 
@@ -105,7 +105,7 @@ const ContentManager = () => {
                   className="capitalize data-[state=active]:bg-[#2B3033] data-[state=active]:text-[#E0D8C8]"
                   data-testid={`tab-${page}`}
                 >
-                  {page}
+                  {page === 'flavors' ? 'Natural Flavors' : page}
                 </TabsTrigger>
               ))}
             </TabsList>

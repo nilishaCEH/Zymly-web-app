@@ -24,9 +24,11 @@ const NaturalFlavors = () => {
     const fetchContent = async () => {
       try {
         const response = await axios.get(`${API}/content/flavors`);
-        const map = {};
-        response.data.forEach(item => { map[item.section] = item; });
-        setContent(map);
+        const contentMap = {};
+        response.data.forEach(item => {
+          contentMap[item.section] = item;
+        });
+        setContent(contentMap);
       } catch (error) {
         console.error('Error fetching flavors page content:', error);
       }
@@ -63,47 +65,30 @@ const NaturalFlavors = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Flavor Cards */}
             <div className="space-y-4">
-              {flavors.map((flavor, index) => {
-                const isSelected = selectedFlavor?.id === flavor.id;
-                return (
-                  <motion.div
-                    key={flavor.id}
-                    initial={{ opacity: 0, x: -30 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.1 }}
-                    onClick={() => setSelectedFlavor(flavor)}
-                    className="p-6 rounded-2xl cursor-pointer transition-all duration-300"
-                    style={
-                      isSelected
-                        ? { backgroundColor: accentColor(flavor), color: '#E0D8C8' }
-                        : { backgroundColor: '#F2EFE8', color: '#2B3033' }
-                    }
-                    data-testid={`flavor-selector-${index}`}
-                  >
-                    <div className="flex items-center gap-4">
-                      <div
-                        className="w-14 h-14 rounded-full flex-shrink-0"
-                        style={{ backgroundColor: flavor.color }}
-                      />
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 flex-wrap mb-1">
-                          <h3 className="text-xl font-bold">{flavor.name}</h3>
-                          {flavor.tags && flavor.tags.map((tag, i) => (
-                            <span
-                              key={i}
-                              className="text-xs px-2 py-0.5 rounded-full font-medium"
-                              style={
-                                isSelected
-                                  ? { backgroundColor: 'rgba(255,255,255,0.2)', color: '#E0D8C8' }
-                                  : { backgroundColor: `${flavor.color}25`, color: accentColor(flavor) }
-                              }
-                            >
-                              {tag}
-                            </span>
-                          ))}
-                        </div>
-                        <p className="text-sm opacity-70">{flavor.tagline}</p>
-                      </div>
+              {flavors.map((flavor, index) => (
+                <motion.div
+                  key={flavor.id}
+                  initial={{ opacity: 0, x: -30 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                  onClick={() => setSelectedFlavor(flavor)}
+                  className={`p-6 rounded-2xl cursor-pointer transition-all duration-300 ${
+                    selectedFlavor?.id === flavor.id
+                      ? 'bg-[#2B3033] text-[#E0D8C8]'
+                      : 'bg-[#F2EFE8] text-[#2B3033] hover:bg-[#2B3033]/5'
+                  }`}
+                  data-testid={`flavor-selector-${index}`}
+                >
+                  <div className="flex items-center gap-4">
+                    <div
+                      className="w-14 h-14 rounded-full flex-shrink-0"
+                      style={{ backgroundColor: flavor.color }}
+                    ></div>
+                    <div className="flex-1">
+                      <h3 className="text-xl font-bold">{flavor.name}</h3>
+                      <p className={`text-sm ${selectedFlavor?.id === flavor.id ? 'text-[#E0D8C8]/70' : 'text-[#2B3033]/60'}`}>
+                        {flavor.tagline}
+                      </p>
                     </div>
                   </motion.div>
                 );
@@ -131,18 +116,10 @@ const NaturalFlavors = () => {
                   />
                 </div>
                 <div className="p-8">
-                  <div className="flex items-center gap-2 mb-4 flex-wrap">
-                    <div className="w-4 h-4 rounded-full" style={{ backgroundColor: selectedFlavor.color }} />
-                    {selectedFlavor.tags && selectedFlavor.tags.map((tag, i) => (
-                      <span
-                        key={i}
-                        className="text-xs px-2 py-0.5 rounded-full font-medium"
-                        style={{ backgroundColor: `${selectedFlavor.color}25`, color: accentColor(selectedFlavor) }}
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
+                  <div
+                    className="inline-block w-4 h-4 rounded-full mb-4"
+                    style={{ backgroundColor: selectedFlavor.color }}
+                  ></div>
                   <h2 className="text-3xl font-bold text-[#2B3033] mb-2">{selectedFlavor.name}</h2>
                   <p className="font-medium mb-4" style={{ color: accentColor(selectedFlavor) }}>{selectedFlavor.tagline}</p>
                   <p className="text-[#2B3033]/70 leading-relaxed mb-6">{selectedFlavor.description}</p>
@@ -201,7 +178,10 @@ const NaturalFlavors = () => {
                   />
                 </div>
                 <div className="p-4 text-center">
-                  <div className="w-3 h-3 rounded-full mx-auto mb-2" style={{ backgroundColor: flavor.color }} />
+                  <div
+                    className="w-3 h-3 rounded-full mx-auto mb-2"
+                    style={{ backgroundColor: flavor.color }}
+                  ></div>
                   <h3 className="font-bold text-[#2B3033]">{flavor.name}</h3>
                   <p className="text-xs text-[#2B3033]/60 mt-1">{flavor.tagline}</p>
                   {flavor.tags && flavor.tags.length > 0 && (
