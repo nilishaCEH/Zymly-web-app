@@ -34,7 +34,7 @@ def get_jwt_secret() -> str:
 # Resend config
 resend.api_key = os.environ.get("RESEND_API_KEY", "")
 SENDER_EMAIL = os.environ.get("SENDER_EMAIL", "onboarding@resend.dev")
-CONTACT_EMAIL = os.environ.get("CONTACT_EMAIL", "contactus@zymly.in")
+CONTACT_EMAIL = os.environ.get("CONTACT_EMAIL", "support@zymly.in")
 
 # Create the main app
 app = FastAPI()
