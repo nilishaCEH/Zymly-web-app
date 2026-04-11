@@ -84,7 +84,7 @@ const NaturalFlavors = () => {
                       <div
                         className="w-14 h-14 rounded-full flex-shrink-0"
                         style={{ backgroundColor: flavor.color }}
-                      />
+                      ></div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 flex-wrap mb-1">
                           <h3 className="text-xl font-bold">{flavor.name}</h3>
@@ -132,7 +132,7 @@ const NaturalFlavors = () => {
                 </div>
                 <div className="p-8">
                   <div className="flex items-center gap-2 mb-4 flex-wrap">
-                    <div className="w-4 h-4 rounded-full" style={{ backgroundColor: selectedFlavor.color }} />
+                    <div className="w-4 h-4 rounded-full" style={{ backgroundColor: selectedFlavor.color }}></div>
                     {selectedFlavor.tags && selectedFlavor.tags.map((tag, i) => (
                       <span
                         key={i}
@@ -201,7 +201,7 @@ const NaturalFlavors = () => {
                   />
                 </div>
                 <div className="p-4 text-center">
-                  <div className="w-3 h-3 rounded-full mx-auto mb-2" style={{ backgroundColor: flavor.color }} />
+                  <div className="w-3 h-3 rounded-full mx-auto mb-2" style={{ backgroundColor: flavor.color }}></div>
                   <h3 className="font-bold text-[#2B3033]">{flavor.name}</h3>
                   <p className="text-xs text-[#2B3033]/60 mt-1">{flavor.tagline}</p>
                   {flavor.tags && flavor.tags.length > 0 && (
