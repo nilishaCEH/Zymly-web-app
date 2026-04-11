@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Instagram, Send, CheckCircle } from 'lucide-react';
+import { Mail, Instagram, Send, CheckCircle, Phone } from 'lucide-react';
 import axios from 'axios';
 import { Input } from '../components/ui/input';
 import { Textarea } from '../components/ui/textarea';
@@ -233,7 +233,7 @@ const ContactUs = () => {
                     </div>
                     <div>
                       <p className="font-medium mb-1">Instagram</p>
-                      <a 
+                      <a
                         href="https://www.instagram.com/go_zymly"
                         target="_blank"
                         rel="noopener noreferrer"
@@ -241,6 +241,24 @@ const ContactUs = () => {
                         data-testid="contact-instagram-link"
                       >
                         @go_zymly
+                      </a>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 rounded-full bg-[#C8A25F]/20 flex items-center justify-center flex-shrink-0">
+                      <Phone className="w-5 h-5 text-[#C8A25F]" />
+                    </div>
+                    <div>
+                      <p className="font-medium mb-1">WhatsApp</p>
+                      <a
+                        href="https://wa.me/919243432249"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[#E0D8C8]/70 hover:text-[#C8A25F] transition-colors"
+                        data-testid="contact-whatsapp-link"
+                      >
+                        +91 92434 32249
                       </a>
                     </div>
                   </div>
