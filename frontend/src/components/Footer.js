@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Instagram, Mail, Heart } from 'lucide-react';
+import { Instagram, Mail, Heart, Phone } from 'lucide-react';
 
 const Footer = () => {
   return (
@@ -20,7 +20,7 @@ const Footer = () => {
             </p>
             <div className="flex items-center gap-4 mt-6">
               <a
-                href="https://instagram.com/zymly"
+                href="https://www.instagram.com/go_zymly"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-10 h-10 rounded-full bg-[#E0D8C8]/10 flex items-center justify-center hover:bg-[#C8A25F] transition-colors"
@@ -34,6 +34,15 @@ const Footer = () => {
                 data-testid="footer-email"
               >
                 <Mail size={18} />
+              </a>
+              <a
+                href="https://wa.me/919243432249"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 rounded-full bg-[#E0D8C8]/10 flex items-center justify-center hover:bg-[#C8A25F] transition-colors"
+                data-testid="footer-whatsapp"
+              >
+                <Phone size={18} />
               </a>
             </div>
           </div>
@@ -72,6 +81,11 @@ const Footer = () => {
               <li>
                 <a href="mailto:support@zymly.in" className="hover:text-[#C8A25F] transition-colors">
                   support@zymly.in
+                </a>
+              </li>
+              <li>
+                <a href="https://wa.me/919243432249" target="_blank" rel="noopener noreferrer" className="hover:text-[#C8A25F] transition-colors">
+                  +91 92434 32249
                 </a>
               </li>
               <li>

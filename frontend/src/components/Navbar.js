@@ -51,7 +51,7 @@ const Navbar = () => {
           {/* Social & CTA */}
           <div className="hidden md:flex items-center gap-4">
             <a
-              href="https://instagram.com/zymly"
+              href="https://www.instagram.com/go_zymly"
               target="_blank"
               rel="noopener noreferrer"
               className="text-[#2B3033] hover:text-[#C8A25F] transition-colors"
@@ -105,7 +105,7 @@ const Navbar = () => {
               ))}
               <div className="pt-4 border-t border-[#2B3033]/10 flex items-center gap-4">
                 <a
-                  href="https://instagram.com/zymly"
+                  href="https://www.instagram.com/go_zymly"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-[#2B3033] hover:text-[#C8A25F] transition-colors"

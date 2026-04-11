@@ -208,7 +208,7 @@ const Home = () => {
                 <ArrowRight size={18} />
               </Link>
               <a
-                href="https://instagram.com/zymly"
+                href="https://www.instagram.com/go_zymly"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="px-6 py-3 rounded-full font-semibold border-2 border-[#E0D8C8]/30 text-[#E0D8C8] hover:bg-[#E0D8C8]/10 transition-all"
