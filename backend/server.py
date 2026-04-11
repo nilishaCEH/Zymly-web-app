@@ -1,7 +1,7 @@
 from dotenv import load_dotenv
 load_dotenv()
 
-from fastapi import FastAPI, APIRouter, HTTPException, Request, Response, Depends
+from fastapi import FastAPI, APIRouter, HTTPException, Request, Response, Depends, BackgroundTasks
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 import os
@@ -51,7 +51,7 @@ async def send_email_smtp(to: str, subject: str, html: str):
     msg["To"] = to
     msg.attach(MIMEText(html, "html"))
     def _send():
-        with smtplib.SMTP(SMTP_HOST, SMTP_PORT) as server:
+        with smtplib.SMTP(SMTP_HOST, SMTP_PORT, timeout=15) as server:
             server.ehlo()
             server.starttls()
             server.login(SMTP_USER, SMTP_PASSWORD)
@@ -303,34 +303,29 @@ async def delete_flavor(flavor_id: str, user: dict = Depends(get_current_user)):
 # ============== CONTACT ENDPOINTS ==============
 
 @contact_router.post("/submit")
-async def submit_contact(form: ContactForm):
+async def submit_contact(form: ContactForm, background_tasks: BackgroundTasks):
     submission = ContactSubmission(**form.model_dump())
     doc = submission.model_dump()
     doc["created_at"] = doc["created_at"].isoformat()
     await db.contact_submissions.insert_one(doc)
-    
-    # Send email notification via SMTP
-    try:
-        html_content = f"""
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-            <h2 style="color: #2B3033;">New Contact Form Submission</h2>
-            <div style="background: #F2EFE8; padding: 20px; border-radius: 8px;">
-                <p><strong>Name:</strong> {form.name}</p>
-                <p><strong>Email:</strong> {form.email}</p>
-                <p><strong>Phone:</strong> {form.phone or 'Not provided'}</p>
-                <p><strong>Message:</strong></p>
-                <p style="white-space: pre-wrap;">{form.message}</p>
-            </div>
-            <p style="color: #666; font-size: 12px; margin-top: 20px;">
-                Sent from Zymly Website Contact Form
-            </p>
+
+    html_content = f"""
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <h2 style="color: #2B3033;">New Contact Form Submission</h2>
+        <div style="background: #F2EFE8; padding: 20px; border-radius: 8px;">
+            <p><strong>Name:</strong> {form.name}</p>
+            <p><strong>Email:</strong> {form.email}</p>
+            <p><strong>Phone:</strong> {form.phone or 'Not provided'}</p>
+            <p><strong>Message:</strong></p>
+            <p style="white-space: pre-wrap;">{form.message}</p>
         </div>
-        """
-        await send_email_smtp(CONTACT_EMAIL, f"New Contact: {form.name}", html_content)
-        logger.info(f"Email sent for contact submission from {form.email}")
-    except Exception as e:
-        logger.error(f"Failed to send email: {str(e)}")
-    
+        <p style="color: #666; font-size: 12px; margin-top: 20px;">
+            Sent from Zymly Website Contact Form
+        </p>
+    </div>
+    """
+    background_tasks.add_task(send_email_smtp, CONTACT_EMAIL, f"New Contact: {form.name}", html_content)
+
     return {"message": "Thank you for contacting us! We'll get back to you soon."}
 
 # ============== SUBMISSIONS ENDPOINTS (Admin) ==============
