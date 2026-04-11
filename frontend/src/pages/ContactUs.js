@@ -218,11 +218,11 @@ const ContactUs = () => {
                     <div>
                       <p className="font-medium mb-1">Email</p>
                       <a 
-                        href="mailto:contactus@zymly.in" 
+                        href="mailto:support@zymly.in"
                         className="text-[#E0D8C8]/70 hover:text-[#C8A25F] transition-colors"
                         data-testid="contact-email-link"
                       >
-                        contactus@zymly.in
+                        support@zymly.in
                       </a>
                     </div>
                   </div>

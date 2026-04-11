@@ -29,7 +29,7 @@ const Footer = () => {
                 <Instagram size={18} />
               </a>
               <a
-                href="mailto:contactus@zymly.in"
+                href="mailto:support@zymly.in"
                 className="w-10 h-10 rounded-full bg-[#E0D8C8]/10 flex items-center justify-center hover:bg-[#C8A25F] transition-colors"
                 data-testid="footer-email"
               >
@@ -70,8 +70,8 @@ const Footer = () => {
             <h4 className="font-bold text-lg mb-6 font-['Outfit']">Get in Touch</h4>
             <ul className="space-y-3 text-[#E0D8C8]/70">
               <li>
-                <a href="mailto:contactus@zymly.in" className="hover:text-[#C8A25F] transition-colors">
-                  contactus@zymly.in
+                <a href="mailto:support@zymly.in" className="hover:text-[#C8A25F] transition-colors">
+                  support@zymly.in
                 </a>
               </li>
               <li>
