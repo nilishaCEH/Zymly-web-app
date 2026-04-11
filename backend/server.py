@@ -14,7 +14,9 @@ import uuid
 from datetime import datetime, timezone, timedelta
 import bcrypt
 import jwt
-import resend
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -31,10 +33,30 @@ JWT_ALGORITHM = "HS256"
 def get_jwt_secret() -> str:
     return os.environ["JWT_SECRET"]
 
-# Resend config
-resend.api_key = os.environ.get("RESEND_API_KEY", "")
-SENDER_EMAIL = os.environ.get("SENDER_EMAIL", "")
+# Email config (SMTP — works with GoDaddy Titan and most providers)
+SMTP_HOST = os.environ.get("SMTP_HOST", "smtp.titan.email")
+SMTP_PORT = int(os.environ.get("SMTP_PORT", "587"))
+SMTP_USER = os.environ.get("SMTP_USER", "")        # your full email, e.g. support@zymly.in
+SMTP_PASSWORD = os.environ.get("SMTP_PASSWORD", "")
 CONTACT_EMAIL = os.environ.get("CONTACT_EMAIL", "support@zymly.in")
+
+
+async def send_email_smtp(to: str, subject: str, html: str):
+    if not SMTP_USER or not SMTP_PASSWORD:
+        logger.warning("SMTP_USER or SMTP_PASSWORD not set — skipping email notification")
+        return
+    msg = MIMEMultipart("alternative")
+    msg["Subject"] = subject
+    msg["From"] = SMTP_USER
+    msg["To"] = to
+    msg.attach(MIMEText(html, "html"))
+    def _send():
+        with smtplib.SMTP(SMTP_HOST, SMTP_PORT) as server:
+            server.ehlo()
+            server.starttls()
+            server.login(SMTP_USER, SMTP_PASSWORD)
+            server.sendmail(SMTP_USER, to, msg.as_string())
+    await asyncio.to_thread(_send)
 
 # Cookie security: use SameSite=None + Secure for cross-origin (prod) or Lax for local dev
 IS_PRODUCTION = os.environ.get("ENVIRONMENT", "development").lower() == "production"
@@ -287,38 +309,27 @@ async def submit_contact(form: ContactForm):
     doc["created_at"] = doc["created_at"].isoformat()
     await db.contact_submissions.insert_one(doc)
     
-    # Send email via Resend
-    if not resend.api_key:
-        logger.warning("RESEND_API_KEY not set — skipping email notification")
-    elif not SENDER_EMAIL:
-        logger.warning("SENDER_EMAIL not set — skipping email notification")
-    else:
-        try:
-            html_content = f"""
-            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-                <h2 style="color: #2B3033;">New Contact Form Submission</h2>
-                <div style="background: #F2EFE8; padding: 20px; border-radius: 8px;">
-                    <p><strong>Name:</strong> {form.name}</p>
-                    <p><strong>Email:</strong> {form.email}</p>
-                    <p><strong>Phone:</strong> {form.phone or 'Not provided'}</p>
-                    <p><strong>Message:</strong></p>
-                    <p style="white-space: pre-wrap;">{form.message}</p>
-                </div>
-                <p style="color: #666; font-size: 12px; margin-top: 20px;">
-                    Sent from Zymly Website Contact Form
-                </p>
+    # Send email notification via SMTP
+    try:
+        html_content = f"""
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+            <h2 style="color: #2B3033;">New Contact Form Submission</h2>
+            <div style="background: #F2EFE8; padding: 20px; border-radius: 8px;">
+                <p><strong>Name:</strong> {form.name}</p>
+                <p><strong>Email:</strong> {form.email}</p>
+                <p><strong>Phone:</strong> {form.phone or 'Not provided'}</p>
+                <p><strong>Message:</strong></p>
+                <p style="white-space: pre-wrap;">{form.message}</p>
             </div>
-            """
-            params = {
-                "from": SENDER_EMAIL,
-                "to": [CONTACT_EMAIL],
-                "subject": f"New Contact: {form.name}",
-                "html": html_content
-            }
-            await asyncio.to_thread(resend.Emails.send, params)
-            logger.info(f"Email sent for contact submission from {form.email}")
-        except Exception as e:
-            logger.error(f"Failed to send email: {str(e)}")
+            <p style="color: #666; font-size: 12px; margin-top: 20px;">
+                Sent from Zymly Website Contact Form
+            </p>
+        </div>
+        """
+        await send_email_smtp(CONTACT_EMAIL, f"New Contact: {form.name}", html_content)
+        logger.info(f"Email sent for contact submission from {form.email}")
+    except Exception as e:
+        logger.error(f"Failed to send email: {str(e)}")
     
     return {"message": "Thank you for contacting us! We'll get back to you soon."}
 

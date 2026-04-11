@@ -16,7 +16,6 @@ google-genai==1.71.0
 litellm==1.80.0
 boto3==1.42.86
 stripe==15.0.1
-resend==2.27.0
 pandas==3.0.2
 pillow==12.2.0
 requests==2.33.1
