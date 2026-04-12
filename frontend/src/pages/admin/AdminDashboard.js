@@ -62,10 +62,11 @@ const AdminDashboard = () => {
     <div className="min-h-screen bg-[#E0D8C8]" data-testid="admin-dashboard">
       {/* Mobile Header */}
       <div className="lg:hidden bg-[#2B3033] px-4 py-3 flex items-center justify-between">
-        <img 
-          src="https://customer-assets.emergentagent.com/job_zymly-mission/artifacts/retece6k_1180243_fotor-2026012315320_1769161062478.png" 
-          alt="Zymly" 
+        <img
+          src="/zymly-logo.png"
+          alt="Zymly"
           className="h-8"
+          style={{ filter: 'drop-shadow(0 2px 8px rgba(0, 0, 0, 0.45))' }}
         />
         <button onClick={() => setSidebarOpen(!sidebarOpen)} className="text-[#E0D8C8]" data-testid="mobile-sidebar-toggle">
           {sidebarOpen ? <X size={24} /> : <Menu size={24} />}
@@ -82,10 +83,11 @@ const AdminDashboard = () => {
         >
           <div className="flex flex-col h-full">
             <div className="p-6 hidden lg:block">
-              <img 
-                src="https://customer-assets.emergentagent.com/job_zymly-mission/artifacts/retece6k_1180243_fotor-2026012315320_1769161062478.png" 
-                alt="Zymly" 
+              <img
+                src="/zymly-logo.png"
+                alt="Zymly"
                 className="h-12"
+                style={{ filter: 'drop-shadow(0 4px 12px rgba(0, 0, 0, 0.45))' }}
               />
             </div>
 

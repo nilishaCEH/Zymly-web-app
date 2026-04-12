@@ -59,10 +59,11 @@ const AboutUs = () => {
                 />
               </div>
               <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-[#C8A25F] rounded-2xl flex items-center justify-center">
-                <img 
-                  src="https://customer-assets.emergentagent.com/job_zymly-mission/artifacts/retece6k_1180243_fotor-2026012315320_1769161062478.png" 
-                  alt="Zymly" 
+                <img
+                  src="/zymly-logo.png"
+                  alt="Zymly"
                   className="w-20 h-20 object-contain"
+                  style={{ filter: 'drop-shadow(0 2px 8px rgba(0, 0, 0, 0.4))' }}
                 />
               </div>
             </motion.div>
@@ -140,10 +141,11 @@ const AboutUs = () => {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
             >
-              <img 
-                src="https://customer-assets.emergentagent.com/job_zymly-mission/artifacts/retece6k_1180243_fotor-2026012315320_1769161062478.png" 
-                alt="Zymly Brand" 
+              <img
+                src="/zymly-logo.png"
+                alt="Zymly Brand"
                 className="w-full max-w-md mx-auto"
+                style={{ filter: 'drop-shadow(0 6px 20px rgba(0, 0, 0, 0.55))' }}
               />
             </motion.div>
 

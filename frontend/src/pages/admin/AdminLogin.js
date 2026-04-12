@@ -43,10 +43,11 @@ const AdminLogin = () => {
         className="w-full max-w-md"
       >
         <div className="text-center mb-8">
-          <img 
-            src="https://customer-assets.emergentagent.com/job_zymly-mission/artifacts/retece6k_1180243_fotor-2026012315320_1769161062478.png" 
-            alt="Zymly" 
+          <img
+            src="/zymly-logo.png"
+            alt="Zymly"
             className="h-16 mx-auto mb-4"
+            style={{ filter: 'drop-shadow(0 4px 14px rgba(0, 0, 0, 0.45))' }}
           />
           <h1 className="text-2xl font-bold text-[#E0D8C8]">Admin Login</h1>
           <p className="text-[#E0D8C8]/60 mt-2">Access the CMS dashboard</p>
