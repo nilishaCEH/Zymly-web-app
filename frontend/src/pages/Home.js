@@ -185,17 +185,17 @@ const Home = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-[#2B3033]" data-testid="cta-section">
+      <section className="py-20 bg-[#E0D8C8]" data-testid="cta-section">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#E0D8C8] tracking-tighter mb-6">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#2B3033] tracking-tighter mb-6">
               Ready to Feel Good?
             </h2>
-            <p className="text-lg text-[#E0D8C8]/70 mb-8 max-w-2xl mx-auto">
+            <p className="text-lg text-[#2B3033]/65 mb-8 max-w-2xl mx-auto">
               Join the Zymly family and discover the joy of naturally fermented goodness. Your gut will thank you!
             </p>
             <div className="flex flex-wrap justify-center gap-4">
@@ -211,7 +211,7 @@ const Home = () => {
                 href="https://www.instagram.com/go_zymly"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-6 py-3 rounded-full font-semibold border-2 border-[#E0D8C8]/30 text-[#E0D8C8] hover:bg-[#E0D8C8]/10 transition-all"
+                className="px-6 py-3 rounded-full font-semibold border-2 border-[#2B3033]/30 text-[#2B3033] hover:bg-[#2B3033]/10 transition-all"
                 data-testid="cta-instagram"
               >
                 Follow on Instagram
