@@ -23,10 +23,11 @@ const Navbar = () => {
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3" data-testid="nav-logo">
-            <img 
-              src="https://customer-assets.emergentagent.com/job_zymly-mission/artifacts/retece6k_1180243_fotor-2026012315320_1769161062478.png" 
-              alt="Zymly" 
-              className="h-12 w-auto"
+            <img
+              src="/zymly-logo.png"
+              alt="Zymly"
+              className="h-14 w-auto"
+              style={{ filter: 'drop-shadow(0 4px 12px rgba(0, 0, 0, 0.35))' }}
             />
           </Link>
 

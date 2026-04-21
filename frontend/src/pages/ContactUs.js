@@ -280,10 +280,11 @@ const ContactUs = () => {
               </div>
 
               <div className="bg-[#F2EFE8] rounded-3xl p-8 md:p-12">
-                <img 
-                  src="https://customer-assets.emergentagent.com/job_zymly-mission/artifacts/retece6k_1180243_fotor-2026012315320_1769161062478.png" 
-                  alt="Zymly" 
-                  className="w-full max-w-xs mx-auto mb-6"
+                <img
+                  src="/zymly-logo.png"
+                  alt="Zymly"
+                  className="w-full max-w-sm mx-auto mb-6"
+                  style={{ filter: 'drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3))' }}
                 />
                 <p className="text-center text-[#2B3033]/70">
                   We're always excited to hear from fellow health enthusiasts, potential partners, or anyone curious about our probiotic journey!
