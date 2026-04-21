@@ -12,7 +12,7 @@ const Footer = () => {
             <img
               src="/zymly-logo.png"
               alt="Zymly"
-              className="h-16 w-auto mb-6"
+              className="w-40 h-auto mb-6"
               style={{ filter: 'drop-shadow(0 4px 14px rgba(0, 0, 0, 0.45))' }}
             />
             <p className="text-[#E0D8C8]/70 max-w-md leading-relaxed">
