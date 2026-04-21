@@ -20,13 +20,13 @@ const Navbar = () => {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 glass border-b border-[#2B3033]/10" data-testid="navbar">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
+        <div className="flex items-center justify-between h-24">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-3" data-testid="nav-logo">
+          <Link to="/" className="flex items-center" data-testid="nav-logo">
             <img
               src="/zymly-logo.png"
               alt="Zymly"
-              className="h-14 w-auto"
+              className="w-40 h-auto"
               style={{ filter: 'drop-shadow(0 4px 12px rgba(0, 0, 0, 0.35))' }}
             />
           </Link>
