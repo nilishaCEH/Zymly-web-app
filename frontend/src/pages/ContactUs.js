@@ -279,16 +279,12 @@ const ContactUs = () => {
                 </div>
               </div>
 
-              <div className="bg-[#F2EFE8] rounded-3xl p-8 md:p-12">
+              <div className="rounded-3xl overflow-hidden">
                 <img
-                  src="/zymly-logo.png"
-                  alt="Zymly"
-                  className="w-full max-w-sm mx-auto mb-6"
-                  style={{ filter: 'drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3))' }}
+                  src="/zymly-products.jpg"
+                  alt="Zymly Probiotic Beverages"
+                  className="w-full h-full object-cover"
                 />
-                <p className="text-center text-[#2B3033]/70">
-                  We're always excited to hear from fellow health enthusiasts, potential partners, or anyone curious about our probiotic journey!
-                </p>
               </div>
             </motion.div>
           </div>
