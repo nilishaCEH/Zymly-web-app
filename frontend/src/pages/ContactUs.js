@@ -279,12 +279,10 @@ const ContactUs = () => {
                 </div>
               </div>
 
-              <div className="rounded-3xl overflow-hidden">
-                <img
-                  src="/zymly-products.jpg"
-                  alt="Zymly Probiotic Beverages"
-                  className="w-full h-full object-cover"
-                />
+              <div className="bg-[#F2EFE8] rounded-3xl p-8 md:p-12 flex items-center justify-center">
+                <p className="text-center text-[#2B3033]/70 text-lg leading-relaxed italic">
+                  "We're always excited to hear from fellow health enthusiasts, potential partners, or anyone curious about our probiotic journey!"
+                </p>
               </div>
             </motion.div>
           </div>
