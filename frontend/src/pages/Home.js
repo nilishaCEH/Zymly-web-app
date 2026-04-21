@@ -44,7 +44,7 @@ const Home = () => {
       <section className="relative min-h-screen flex items-center pt-20" data-testid="hero-section">
         <div className="absolute inset-0 z-0">
           <img
-            src={content.hero?.image_url || "/banner_1.jpg"}
+            src="/banner_1.jpg"
             alt="Hero background"
             className="w-full h-full object-cover"
           />
