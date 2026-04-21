@@ -26,7 +26,7 @@ const Navbar = () => {
             <img
               src="/zymly-logo.png"
               alt="Zymly"
-              className="w-32 h-auto"
+              className="w-24 h-auto"
               style={{ filter: 'drop-shadow(0 4px 12px rgba(0, 0, 0, 0.35))' }}
             />
           </Link>
